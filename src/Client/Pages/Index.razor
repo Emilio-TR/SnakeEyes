@@ -3,6 +3,44 @@
 <PageTitle>Snake Eyes</PageTitle>
 <h1>Snake Eyes</h1>
 <div>
-    <Dice Pips="4" />
-    <Dice Pips="6" />
+    <Dice Pips="@_game.Eye1" />
+    <Dice Pips="@_game.Eye2" />
 </div>
+
+<p> Score: @_game.Total </p>
+
+
+
+<button @onclick="@_game.Play" disabled="@_game.HasSnakeEyes" >Play</button>
+<button @onclick="Cheat">Cheat</button>
+
+@if (_game.HasSnakeEyes)
+{
+    <div class="alert alert-danger" role="alert">
+        You lost suckaaaah
+
+    </div>
+    <button @onclick="@_game.Restart">Restart</button>
+}
+
+<ul>
+    
+    <h2>Highscores</h2>
+    @foreach(var score in _game.HighScores.OrderByDescending(x => x))
+    {
+        <li>@score</li>
+    }
+</ul>
+
+@code {
+    private Game _game = new Game();
+
+    void Cheat()
+    {
+        do
+        {
+            _game.Play();
+
+        } while (!_game.HasSnakeEyes);
+    }
+}
